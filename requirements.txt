@@ -1,0 +1,10 @@
+ipykernel
+numpy
+pandas
+openpyxl
+scikit-learn
+imblearn
+lazypredict
+IProgress
+jupyter
+ipywidgets
