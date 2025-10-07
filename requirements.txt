@@ -9,3 +9,4 @@ IProgress
 jupyter
 ipywidgets
 plotly
+xgboost
