@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diamond Price Predictor - Luxury Edition</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(
+          135deg,
+          #0a0a0a 0%,
+          #1a1a2e 50%,
+          #16213e 100%
+        );
+        color: #ffffff;
+        font-family: "Montserrat", sans-serif;
+        min-height: 100vh;
+        padding: 0;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+            circle at 20% 30%,
+            rgba(147, 112, 219, 0.15) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 70%,
+            rgba(64, 224, 208, 0.1) 0%,
+            transparent 50%
+          );
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .diamond-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .diamond-particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        animation: float 15s infinite ease-in-out;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0) translateX(0);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100vh) translateX(50px);
+          opacity: 0;
+        }
+      }
+
+      .container-wrapper {
+        position: relative;
+        z-index: 1;
+        padding: 20px 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      .main-container {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 30px;
+        padding: 30px 40px;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+      }
+
+      .main-container::before {
+        content: "";
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(
+          45deg,
+          rgba(147, 112, 219, 0.3),
+          rgba(64, 224, 208, 0.3),
+          rgba(147, 112, 219, 0.3)
+        );
+        border-radius: 30px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .main-container:hover::before {
+        opacity: 1;
+      }
+
+      .header-section {
+        text-align: center;
+        margin-bottom: 25px;
+        position: relative;
+      }
+
+      .diamond-icon {
+        font-size: 2.5rem;
+        background: linear-gradient(135deg, #9370db 0%, #40e0d0 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 10px;
+        animation: pulse 2s ease-in-out infinite;
+        display: inline-block;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+          filter: brightness(1);
+        }
+        50% {
+          transform: scale(1.1);
+          filter: brightness(1.3);
+        }
+      }
+
+      h1 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(
+          135deg,
+          #ffffff 0%,
+          #9370db 50%,
+          #40e0d0 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 8px;
+        letter-spacing: 2px;
+      }
+
+      .subtitle {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 300;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+      }
+
+      .form-section {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 20px;
+        padding: 25px 30px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .form-label {
+        color: #ffffff;
+        font-weight: 500;
+        margin-bottom: 6px;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .form-label i {
+        color: #40e0d0;
+        font-size: 1rem;
+      }
+
+      /* Input styling with WCAG AA contrast */
+      .form-control,
+      .form-select {
+        background: rgba(20, 20, 35, 0.8);
+        border: 2px solid rgba(147, 112, 219, 0.3);
+        color: #ffffff;
+        border-radius: 12px;
+        padding: 12px 16px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        min-height: 44px;
+      }
+
+      /* Focus state with high visibility - WCAG 2.4.7 */
+      .form-control:focus,
+      .form-select:focus {
+        background: rgba(30, 30, 45, 0.9);
+        border-color: #40e0d0;
+        border-width: 3px;
+        box-shadow: 0 0 0 4px rgba(64, 224, 208, 0.2),
+          0 0 20px rgba(64, 224, 208, 0.4);
+        color: #ffffff;
+        outline: none;
+        transform: translateY(-1px);
+      }
+
+      /* Hover state for better feedback */
+      .form-control:hover:not(:focus),
+      .form-select:hover:not(:focus) {
+        border-color: rgba(147, 112, 219, 0.5);
+        background: rgba(25, 25, 40, 0.85);
+      }
+
+      .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .form-select option {
+        background: #1a1a2e;
+        color: #ffffff;
+        padding: 10px;
+      }
+
+      .mb-3 {
+        margin-bottom: 1rem;
+      }
+
+      /* Primary CTA button - High contrast with cool colors and white text */
+      .btn-predict {
+        background: linear-gradient(135deg, #4169e1 0%, #40e0d0 100%);
+        border: none;
+        color: #ffffff;
+        padding: 14px 50px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 2.5px;
+        box-shadow: 0 12px 35px rgba(65, 105, 225, 0.5);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        margin-top: 15px;
+        min-height: 50px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .btn-predict::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+
+      /* Hover state with clear visual feedback */
+      .btn-predict:hover {
+        background: linear-gradient(135deg, #5179f1 0%, #50f0e0 100%);
+        transform: translateY(-4px);
+        box-shadow: 0 16px 45px rgba(65, 105, 225, 0.7);
+      }
+
+      .btn-predict:hover::before {
+        left: 100%;
+      }
+
+      /* Active state for touch feedback */
+      .btn-predict:active {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(65, 105, 225, 0.6);
+      }
+
+      /* Focus state for keyboard navigation - WCAG 2.4.7 */
+      .btn-predict:focus {
+        outline: 3px solid #ffffff;
+        outline-offset: 4px;
+        box-shadow: 0 0 0 6px rgba(64, 224, 208, 0.3),
+          0 12px 35px rgba(65, 105, 225, 0.5);
+      }
+
+      /* Loading state */
+      .btn-predict.loading {
+        pointer-events: none;
+        opacity: 0.7;
+      }
+
+      .btn-predict.loading::after {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-top-color: #ffffff;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin-left: 10px;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Result section with high contrast */
+      .result {
+        margin-top: 20px;
+        padding: 25px;
+        border-radius: 20px;
+        display: none;
+        background: linear-gradient(
+          135deg,
+          rgba(30, 30, 50, 0.95) 0%,
+          rgba(20, 40, 60, 0.95) 100%
+        );
+        border: 3px solid rgba(64, 224, 208, 0.6);
+        box-shadow: 0 20px 40px rgba(64, 224, 208, 0.4);
+        backdrop-filter: blur(10px);
+        animation: slideIn 0.5s ease;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .result h4 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .result h4 i {
+        color: #40e0d0;
+        font-size: 1.4rem;
+      }
+
+      #predictedPrice {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #40e0d0;
+        display: block;
+        margin-top: 8px;
+        text-shadow: 0 0 30px rgba(64, 224, 208, 0.5);
+        letter-spacing: 2px;
+      }
+
+      .input-group-wrapper {
+        position: relative;
+      }
+
+      /* Error state styling */
+      .form-control.error,
+      .form-select.error {
+        border-color: #ff6b6b;
+        background: rgba(255, 107, 107, 0.1);
+      }
+
+      .error-message {
+        color: #ff9999;
+        font-size: 0.9rem;
+        margin-top: 5px;
+        display: none;
+      }
+
+      .form-control.error + .error-message,
+      .form-select.error + .error-message {
+        display: block;
+      }
+
+      /* Touch target sizing - minimum 44x44px for mobile */
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2.5rem;
+        }
+
+        .main-container {
+          padding: 30px 20px;
+        }
+
+        .form-section {
+          padding: 25px;
+        }
+
+        .form-control,
+        .form-select {
+          min-height: 50px;
+          font-size: 1rem;
+          padding: 14px 18px;
+        }
+
+        .btn-predict {
+          padding: 18px 50px;
+          font-size: 1.1rem;
+          min-height: 56px;
+          width: 100%;
+        }
+
+        #predictedPrice {
+          font-size: 2.8rem;
+        }
+
+        .result h4 {
+          font-size: 1.6rem;
+        }
+      }
+
+      .row {
+        margin-bottom: 10px;
+      }
+
+      /* Skip to main content for accessibility */
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: #4169e1;
+        color: white;
+        padding: 8px;
+        text-decoration: none;
+        z-index: 100;
+      }
+
+      .skip-link:focus {
+        top: 0;
+      }
+
+      /* High contrast mode support */
+      @media (prefers-contrast: high) {
+        .form-control,
+        .form-select {
+          border-width: 3px;
+        }
+
+        .btn-predict {
+          border: 3px solid #ffffff;
+        }
+      }
+
+      /* Reduced motion for accessibility */
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <div class="diamond-bg" id="diamondBg" aria-hidden="true"></div>
+
+    <div class="container-wrapper">
+      <main id="main-content" class="main-container">
+        <header class="header-section">
+          <div class="diamond-icon" aria-hidden="true">💎</div>
+          <h1>Diamond Valuation</h1>
+          <p class="subtitle">Precision · Elegance · Excellence</p>
+        </header>
+
+        <div class="form-section">
+          <form id="predictionForm" novalidate>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="carat" class="form-label">
+                  <i class="fas fa-gem" aria-hidden="true"></i> Carat Weight
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control"
+                  id="carat"
+                  placeholder="1.25"
+                  required
+                  aria-required="true"
+                  aria-describedby="carat-error"
+                />
+                <span id="carat-error" class="error-message" role="alert"
+                  >Please enter a valid carat weight</span
+                >
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="cut" class="form-label">
+                  <i class="fas fa-cut" aria-hidden="true"></i> Cut Quality
+                </label>
+                <select
+                  class="form-select"
+                  id="cut"
+                  required
+                  aria-required="true"
+                >
+                  <option value="">Select cut quality</option>
+                  <option value="Fair">Fair</option>
+                  <option value="Good">Good</option>
+                  <option value="Very Good">Very Good</option>
+                  <option value="Premium">Premium</option>
+                  <option value="Ideal">Ideal</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="color" class="form-label">
+                  <i class="fas fa-palette" aria-hidden="true"></i> Color Grade
+                </label>
+                <select
+                  class="form-select"
+                  id="color"
+                  required
+                  aria-required="true"
+                >
+                  <option value="">Select color grade</option>
+                  <option value="D">D (Colorless)</option>
+                  <option value="E">E (Colorless)</option>
+                  <option value="F">F (Colorless)</option>
+                  <option value="G">G (Near Colorless)</option>
+                  <option value="H">H (Near Colorless)</option>
+                  <option value="I">I (Near Colorless)</option>
+                  <option value="J">J (Near Colorless)</option>
+                </select>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="clarity" class="form-label">
+                  <i class="fas fa-eye" aria-hidden="true"></i> Clarity Rating
+                </label>
+                <select
+                  class="form-select"
+                  id="clarity"
+                  required
+                  aria-required="true"
+                >
+                  <option value="">Select clarity rating</option>
+                  <option value="I1">I1 (Included)</option>
+                  <option value="SI2">SI2 (Slightly Included)</option>
+                  <option value="SI1">SI1 (Slightly Included)</option>
+                  <option value="VS2">VS2 (Very Slightly Included)</option>
+                  <option value="VS1">VS1 (Very Slightly Included)</option>
+                  <option value="VVS2">
+                    VVS2 (Very Very Slightly Included)
+                  </option>
+                  <option value="VVS1">
+                    VVS1 (Very Very Slightly Included)
+                  </option>
+                  <option value="IF">IF (Internally Flawless)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label for="depth" class="form-label">
+                  <i class="fas fa-percentage" aria-hidden="true"></i> Depth
+                  Percentage
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control"
+                  id="depth"
+                  placeholder="61.5"
+                  required
+                  aria-required="true"
+                />
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="table" class="form-label">
+                  <i class="fas fa-table" aria-hidden="true"></i> Table
+                  Percentage
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control"
+                  id="table"
+                  placeholder="57.0"
+                  required
+                  aria-required="true"
+                />
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="x" class="form-label">
+                  <i class="fas fa-arrows-alt-h" aria-hidden="true"></i> Length
+                  (mm)
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control"
+                  id="x"
+                  placeholder="5.73"
+                  required
+                  aria-required="true"
+                />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="y" class="form-label">
+                  <i class="fas fa-arrows-alt-v" aria-hidden="true"></i> Width
+                  (mm)
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control"
+                  id="y"
+                  placeholder="5.76"
+                  required
+                  aria-required="true"
+                />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="z" class="form-label">
+                  <i class="fas fa-cube" aria-hidden="true"></i> Depth (mm)
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control"
+                  id="z"
+                  placeholder="3.53"
+                  required
+                  aria-required="true"
+                />
+              </div>
+            </div>
+
+            <div class="text-center">
+              <button
+                type="submit"
+                class="btn-predict"
+                aria-label="Calculate diamond value"
+              >
+                <i class="fas fa-chart-line" aria-hidden="true"></i>
+                <span>Calculate Value</span>
+              </button>
+            </div>
+          </form>
+
+          <div
+            id="result"
+            class="result text-center"
+            role="status"
+            aria-live="polite"
+          >
+            <h4>
+              <i class="fas fa-sparkles" aria-hidden="true"></i> Estimated Value
+            </h4>
+            <span id="predictedPrice">$0</span>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // Create floating diamond particles
+      function createDiamondParticles() {
+        const bg = document.getElementById("diamondBg");
+        for (let i = 0; i < 30; i++) {
+          const particle = document.createElement("div");
+          particle.className = "diamond-particle";
+          particle.style.left = Math.random() * 100 + "%";
+          particle.style.animationDelay = Math.random() * 15 + "s";
+          particle.style.animationDuration = Math.random() * 10 + 10 + "s";
+          bg.appendChild(particle);
+        }
+      }
+
+      createDiamondParticles();
+
+      const form = document.getElementById("predictionForm");
+      const submitBtn = form.querySelector(".btn-predict");
+
+      document
+        .getElementById("predictionForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          console.log("Form submitted!");
+
+          // Add loading state
+          submitBtn.classList.add("loading");
+          submitBtn.querySelector("span").textContent = "Calculating...";
+
+          const formData = {
+            carat: parseFloat(document.getElementById("carat").value),
+            cut: document.getElementById("cut").value,
+            color: document.getElementById("color").value,
+            clarity: document.getElementById("clarity").value,
+            depth: parseFloat(document.getElementById("depth").value),
+            table: parseFloat(document.getElementById("table").value),
+            x: parseFloat(document.getElementById("x").value),
+            y: parseFloat(document.getElementById("y").value),
+            z: parseFloat(document.getElementById("z").value),
+          };
+
+          try {
+            const response = await fetch("/predict", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+            const priceElement = document.getElementById("predictedPrice");
+            priceElement.textContent = new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
+              maximumFractionDigits: 0,
+            }).format(data.predicted_price);
+
+            const resultDiv = document.getElementById("result");
+            resultDiv.style.display = "block";
+
+            // Announce to screen readers
+            resultDiv.setAttribute(
+              "aria-label",
+              `Estimated value is ${priceElement.textContent}`
+            );
+
+            // Scroll to result smoothly
+            resultDiv.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          } catch (error) {
+            console.error("Error:", error);
+            alert(
+              "An error occurred while making the prediction. Please try again."
+            );
+          } finally {
+            // Remove loading state
+            submitBtn.classList.remove("loading");
+            submitBtn.querySelector("span").textContent = "Calculate Value";
+          }
+        });
+
+      // Enhanced form validation with visual feedback
+      const inputs = form.querySelectorAll("input[required], select[required]");
+      inputs.forEach((input) => {
+        input.addEventListener("blur", function () {
+          if (!this.value || (this.type === "number" && isNaN(this.value))) {
+            this.classList.add("error");
+          } else {
+            this.classList.remove("error");
+          }
+        });
+
+        input.addEventListener("input", function () {
+          if (this.classList.contains("error") && this.value) {
+            this.classList.remove("error");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

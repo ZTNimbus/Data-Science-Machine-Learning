@@ -11,3 +11,4 @@ ipywidgets
 plotly
 xgboost
 lightgbm
+kneed
